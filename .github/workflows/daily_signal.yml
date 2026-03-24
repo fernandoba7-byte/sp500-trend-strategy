@@ -1,0 +1,35 @@
+name: Daily Signal Check
+on:
+  schedule:
+    - cron: '30 21 * * 1-5'  # 4:30 PM ET / 3:30 PM CT (after market close)
+  workflow_dispatch:           # Allow manual trigger
+
+jobs:
+  check-signal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily signal check
+        run: python monitor/daily_check.py
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+
+      - name: Commit signal log
+        run: |
+          git config user.name "Signal Bot"
+          git config user.email "bot@signal"
+          git add data/signal_log.csv data/status.json
+          git diff --staged --quiet || git commit -m "Signal update $(date +%Y-%m-%d)"
+          git push
