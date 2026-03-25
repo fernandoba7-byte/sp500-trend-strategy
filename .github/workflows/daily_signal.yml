@@ -4,6 +4,9 @@ on:
     - cron: '30 21 * * 1-5'  # 4:30 PM ET / 3:30 PM CT (after market close)
   workflow_dispatch:           # Allow manual trigger
 
+permissions:
+  contents: write
+
 jobs:
   check-signal:
     runs-on: ubuntu-latest
