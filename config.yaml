@@ -1,0 +1,56 @@
+# ── Signal Parameters ────────────────────────────────────────────
+signal:
+  ema_period: 200
+  adx_period: 14
+  adx_threshold: 25
+  roc_period: 126
+  confirmation_days: 3
+
+  allocation_map:
+    3: 1.00
+    2: 0.66
+    1: 0.33
+    0: 0.00
+
+# ── Portfolio ────────────────────────────────────────────────────
+portfolio:
+  tickers:
+    - AAPL
+    - NVDA
+    - MSFT
+    - AMZN
+    - GOOG
+  cash_etf: SGOV
+  signal_ticker: SPY
+  rebalance_month: 1
+  target_weight: 0.20
+
+# ── Trading ──────────────────────────────────────────────────────
+trading:
+  transaction_cost: 0.004
+  monthly_deposit: 3000
+  broker: Actinver
+  broker_secondary: GBM
+
+# ── Alerts ───────────────────────────────────────────────────────
+alerts:
+  enabled: true
+  channels:
+    - telegram
+    - email
+  telegram:
+    bot_token: ${TELEGRAM_BOT_TOKEN}
+    chat_id: ${TELEGRAM_CHAT_ID}
+  email:
+    smtp_server: smtp.gmail.com
+    sender: ${EMAIL_SENDER}
+    recipient: ${EMAIL_RECIPIENT}
+    password: ${EMAIL_PASSWORD}
+  alert_on_change_only: true
+  weekly_summary: true
+
+# ── Data ─────────────────────────────────────────────────────────
+data:
+  source: yfinance
+  lookback_days: 300
+  cache_dir: data/cache
