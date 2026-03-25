@@ -1,8 +1,8 @@
 name: Daily Signal Check
 on:
   schedule:
-    - cron: '30 21 * * 1-5'  # 4:30 PM ET / 3:30 PM CT (after market close)
-  workflow_dispatch:           # Allow manual trigger
+    - cron: '0 22 * * 1-5'  # 5:00 PM ET / 4:00 PM CT (1hr after market close)
+  workflow_dispatch:          # Allow manual trigger
 
 permissions:
   contents: write
@@ -29,10 +29,10 @@ jobs:
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
-      - name: Commit signal log
+      - name: Commit signal log and dashboard
         run: |
           git config user.name "Signal Bot"
           git config user.email "bot@signal"
-          git add data/signal_log.csv data/status.json
+          git add data/signal_log.csv data/status.json docs/data.json
           git diff --staged --quiet || git commit -m "Signal update $(date +%Y-%m-%d)"
           git push
