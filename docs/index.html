@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SP500 Trend Strategy — E2 Signal Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
     --bg: #0d1117; --surface: #161b22; --border: #30363d;
@@ -34,10 +35,12 @@
   .pending-box .title { color: var(--yellow); font-weight: 600; margin-bottom: 4px; }
   .watch-item { padding: 6px 0; display: flex; gap: 8px; align-items: flex-start; }
   .watch-icon { flex-shrink: 0; }
-  .dca-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-  .dca-table th, .dca-table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
-  .dca-table th { color: var(--muted); font-size: 0.75em; text-transform: uppercase; }
-  .dca-table td { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9em; }
+  .chart-container { position: relative; width: 100%; margin-top: 8px; }
+  .chart-container canvas { width: 100% !important; }
+  .chart-tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
+  .chart-tab { padding: 5px 12px; border-radius: 4px; font-size: 0.75em; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.15s; }
+  .chart-tab:hover { border-color: var(--accent); color: var(--text); }
+  .chart-tab.active { background: rgba(88,166,255,0.15); border-color: var(--accent); color: var(--accent); }
   table.history { width: 100%; border-collapse: collapse; font-size: 0.8em; margin-top: 8px; }
   table.history th { color: var(--muted); text-transform: uppercase; font-size: 0.7em; letter-spacing: 0.03em; padding: 6px 6px; text-align: right; border-bottom: 1px solid var(--border); }
   table.history th:first-child { text-align: left; }
@@ -60,24 +63,209 @@
 </div>
 
 <script>
-const ALLOC_COLORS = { 100: 'var(--green)', 66: 'var(--yellow)', 33: 'var(--orange)', 0: 'var(--red)' };
-const ALLOC_LABELS = {
-  1.0: '100% Equities', 0.66: '66% Equities / 34% SGOV',
-  0.33: '33% Equities / 67% SGOV', 0.0: '0% Equities / 100% SGOV'
-};
+const ALLOC_COLORS = { 100: '#3fb950', 66: '#d29922', 33: '#db6d28', 0: '#f85149' };
 const ALLOC_STATUS = { 1.0: 'FULL RISK-ON', 0.66: 'MODERATE', 0.33: 'DEFENSIVE', 0.0: 'FULL RISK-OFF' };
+const CHART_GRID = 'rgba(48,54,61,0.5)';
+const CHART_TEXT = '#8b949e';
 
 function allocClass(a) { return 'signal-' + Math.round(a * 100); }
-function allocColor(a) { return ALLOC_COLORS[Math.round(a * 100)] || 'var(--muted)'; }
 function dotColor(a) {
   const c = Math.round((a !== null && a !== undefined ? a : 0) * 100);
-  return ALLOC_COLORS[c] || 'var(--muted)';
+  return ALLOC_COLORS[c] || '#8b949e';
+}
+
+// ── Chart defaults
+Chart.defaults.color = CHART_TEXT;
+Chart.defaults.borderColor = CHART_GRID;
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+Chart.defaults.font.size = 11;
+
+let charts = {};
+
+function createPriceChart(ctx, history) {
+  const labels = history.map(h => h.date.slice(5)); // MM-DD
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'SPY Close',
+          data: history.map(h => h.spy_close),
+          borderColor: '#58a6ff',
+          backgroundColor: 'rgba(88,166,255,0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 0,
+          pointHitRadius: 8,
+          borderWidth: 2,
+        },
+        {
+          label: 'EMA 200',
+          data: history.map(h => h.ema200),
+          borderColor: '#f0883e',
+          borderDash: [6, 3],
+          tension: 0.3,
+          pointRadius: 0,
+          pointHitRadius: 8,
+          borderWidth: 1.5,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'right', grid: { color: CHART_GRID } }
+      }
+    }
+  });
+}
+
+function createADXChart(ctx, history) {
+  const labels = history.map(h => h.date.slice(5));
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'ADX',
+          data: history.map(h => h.adx),
+          borderColor: '#bc8cff',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHitRadius: 8,
+          borderWidth: 2,
+        },
+        {
+          label: '+DI',
+          data: history.map(h => h.plus_di),
+          borderColor: '#3fb950',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHitRadius: 8,
+          borderWidth: 1.5,
+        },
+        {
+          label: '-DI',
+          data: history.map(h => h.minus_di),
+          borderColor: '#f85149',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHitRadius: 8,
+          borderWidth: 1.5,
+        },
+        {
+          label: 'Threshold (25)',
+          data: history.map(() => 25),
+          borderColor: 'rgba(139,148,158,0.4)',
+          borderDash: [4, 4],
+          pointRadius: 0,
+          borderWidth: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'right', grid: { color: CHART_GRID }, min: 0 }
+      }
+    }
+  });
+}
+
+function createROCChart(ctx, history) {
+  const labels = history.map(h => h.date.slice(5));
+  const data = history.map(h => h.roc126);
+  const colors = data.map(v => v !== null && v >= 0 ? 'rgba(63,185,80,0.7)' : 'rgba(248,81,73,0.7)');
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'ROC 126d (%)',
+        data,
+        backgroundColor: colors,
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'right', grid: { color: CHART_GRID } }
+      }
+    }
+  });
+}
+
+function createAllocChart(ctx, history) {
+  const labels = history.map(h => h.date.slice(5));
+  const data = history.map(h => h.confirmed_alloc !== null ? Math.round(h.confirmed_alloc * 100) : null);
+  const colors = data.map(v => dotColor((v || 0) / 100));
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Confirmed Allocation (%)',
+        data,
+        borderColor: '#58a6ff',
+        backgroundColor: 'rgba(88,166,255,0.1)',
+        fill: true,
+        stepped: 'before',
+        pointRadius: 3,
+        pointBackgroundColor: colors,
+        pointBorderColor: colors,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'right', grid: { color: CHART_GRID }, min: 0, max: 100,
+          ticks: { callback: v => v + '%' } }
+      }
+    }
+  });
+}
+
+const CHART_BUILDERS = {
+  price: { label: 'SPY + EMA200', fn: createPriceChart },
+  adx:   { label: 'ADX + DI',    fn: createADXChart },
+  roc:   { label: 'ROC 126d',    fn: createROCChart },
+  alloc: { label: 'Allocation',  fn: createAllocChart },
+};
+
+function switchChart(key, history) {
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.toggle('active', t.dataset.key === key));
+  const container = document.getElementById('chart-area');
+  container.innerHTML = '<canvas id="main-chart"></canvas>';
+  if (charts.current) charts.current.destroy();
+  const ctx = document.getElementById('main-chart').getContext('2d');
+  charts.current = CHART_BUILDERS[key].fn(ctx, history);
 }
 
 function render(d) {
   const s = d.signal;
   const allocPct = Math.round(s.confirmed_allocation * 100);
   const subs = s.sub_signals;
+  const history = d.history || [];
 
   let html = '';
 
@@ -90,12 +278,11 @@ function render(d) {
     </div>
     <div class="metric-grid">
       <div class="metric"><div class="metric-value">${allocPct}%</div><div class="metric-label">Equity Allocation</div></div>
-      <div class="metric"><div class="metric-value">$${d.date ? d.history?.[d.history.length-1]?.spy_close || '—' : '—'}</div><div class="metric-label">SPY Close</div></div>
+      <div class="metric"><div class="metric-value">$${history.length ? history[history.length-1].spy_close : '—'}</div><div class="metric-label">SPY Close</div></div>
       <div class="metric"><div class="metric-value">${s.raw_score}/3</div><div class="metric-label">Raw Score</div></div>
       <div class="metric"><div class="metric-value">${d.date}</div><div class="metric-label">Last Updated</div></div>
     </div>`;
 
-  // Pending change
   if (s.pending_change) {
     const pc = s.pending_change;
     const pAlloc = Math.round(pc.pending_alloc * 100);
@@ -106,6 +293,17 @@ function render(d) {
     </div>`;
   }
   html += `</div>`;
+
+  // ── Charts Card
+  if (history.length > 1) {
+    html += `<div class="card">
+      <div class="card-title">Charts</div>
+      <div class="chart-tabs">`;
+    for (const [key, cfg] of Object.entries(CHART_BUILDERS)) {
+      html += `<button class="chart-tab${key === 'price' ? ' active' : ''}" data-key="${key}">${cfg.label}</button>`;
+    }
+    html += `</div><div id="chart-area" class="chart-container" style="height:280px"><canvas id="main-chart"></canvas></div></div>`;
+  }
 
   // ── Sub-signals Card
   html += `<div class="card"><div class="card-title">E2 Score Breakdown</div>`;
@@ -131,24 +329,14 @@ function render(d) {
     html += `</div>`;
   }
 
-  // ── Monthly DCA
-  if (d.dca) {
-    html += `<div class="card"><div class="card-title">Monthly DCA Split ($${d.dca.monthly_deposit.toLocaleString()})</div>
-      <table class="dca-table"><thead><tr><th>Ticker</th><th>Amount</th></tr></thead><tbody>`;
-    for (const t of d.portfolio.tickers) {
-      html += `<tr><td>${t}</td><td>$${d.dca.per_stock.toFixed(2)}</td></tr>`;
-    }
-    html += `<tr><td><strong>${d.portfolio.cash_etf}</strong></td><td><strong>$${d.dca.sgov.toFixed(2)}</strong></td></tr>`;
-    html += `</tbody></table></div>`;
-  }
-
-  // ── Recent History
-  if (d.history && d.history.length) {
-    html += `<div class="card"><div class="card-title">Recent Signal History (${d.history.length} days)</div>
+  // ── Recent History (newest first)
+  if (history.length) {
+    const reversed = [...history].reverse();
+    html += `<div class="card"><div class="card-title">Recent Signal History (${history.length} days)</div>
       <div style="overflow-x:auto"><table class="history"><thead>
         <tr><th>Date</th><th>SPY</th><th>EMA200</th><th>ADX</th><th>+DI/-DI</th><th>ROC</th><th>Score</th><th>Alloc</th></tr>
       </thead><tbody>`;
-    for (const h of d.history) {
+    for (const h of reversed) {
       const aColor = dotColor(h.confirmed_alloc);
       const allocLabel = h.confirmed_alloc !== null ? Math.round(h.confirmed_alloc * 100) + '%' : '—';
       html += `<tr>
@@ -166,6 +354,16 @@ function render(d) {
   }
 
   document.getElementById('app').innerHTML = html;
+
+  // ── Initialize charts after DOM is ready
+  if (history.length > 1) {
+    document.querySelectorAll('.chart-tab').forEach(tab => {
+      tab.addEventListener('click', () => switchChart(tab.dataset.key, history));
+    });
+    // Render default chart
+    const ctx = document.getElementById('main-chart').getContext('2d');
+    charts.current = createPriceChart(ctx, history);
+  }
 }
 
 // Load data
