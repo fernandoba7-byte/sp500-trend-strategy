@@ -1,0 +1,39 @@
+{
+  "date": "2026-03-24",
+  "signal": {
+    "confirmed_allocation": 0.0,
+    "allocation_label": "0% Equities / 100% SGOV",
+    "raw_score": 0,
+    "confirmed_score": 0,
+    "sub_signals": {
+      "ema200": {
+        "value": false,
+        "detail": "SPY 653.18 < EMA200 657.26"
+      },
+      "adx_di": {
+        "value": false,
+        "detail": "ADX 36.5 > 25, +DI 11.9 < -DI 36.6"
+      },
+      "roc126": {
+        "value": false,
+        "detail": "ROC126 -1.5% < 0"
+      }
+    },
+    "days_at_pending": 0,
+    "pending_change": null
+  },
+  "portfolio": {
+    "tickers": [
+      "AAPL",
+      "NVDA",
+      "MSFT",
+      "AMZN",
+      "GOOG"
+    ],
+    "target_alloc": {
+      "equities": 0.0,
+      "sgov": 1.0
+    }
+  },
+  "action_required": "NONE"
+}
