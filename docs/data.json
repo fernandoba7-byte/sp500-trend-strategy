@@ -1,0 +1,392 @@
+{
+  "date": "2026-03-24",
+  "signal": {
+    "confirmed_allocation": 0.0,
+    "allocation_label": "0% Equities / 100% SGOV",
+    "raw_score": 0,
+    "confirmed_score": 0,
+    "sub_signals": {
+      "ema200": {
+        "value": false,
+        "detail": "SPY 653.18 < EMA200 655.95"
+      },
+      "adx_di": {
+        "value": false,
+        "detail": "ADX 36.5 > 25, +DI 11.9 < -DI 36.6"
+      },
+      "roc126": {
+        "value": false,
+        "detail": "ROC126 -1.5% < 0"
+      }
+    },
+    "days_at_confirmed": 1,
+    "days_at_pending": 0,
+    "pending_change": null
+  },
+  "portfolio": {
+    "tickers": [
+      "AAPL",
+      "NVDA",
+      "MSFT",
+      "AMZN",
+      "GOOG"
+    ],
+    "cash_etf": "SGOV",
+    "target_alloc": {
+      "equities": 0.0,
+      "sgov": 1.0
+    }
+  },
+  "dca": {
+    "monthly_deposit": 3000,
+    "per_stock": 0.0,
+    "sgov": 3000.0
+  },
+  "watch": [
+    {
+      "icon": "below",
+      "text": "SPY is 0.4% below EMA200 \u2014 needs to cross above for +1 point"
+    },
+    {
+      "icon": "warning",
+      "text": "ADX at 36.5 (above 25), but +DI < -DI"
+    },
+    {
+      "icon": "below",
+      "text": "6-month momentum is negative (-1.5%) \u2014 watch for turn positive"
+    }
+  ],
+  "action_required": "NONE",
+  "history": [
+    {
+      "date": "2026-02-10",
+      "spy_close": 690.23,
+      "ema200": 649.86,
+      "adx": 11.0,
+      "plus_di": 22.9,
+      "minus_di": 22.9,
+      "roc126": 9.46,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-11",
+      "spy_close": 690.08,
+      "ema200": 650.26,
+      "adx": 10.6,
+      "plus_di": 21.2,
+      "minus_di": 23.5,
+      "roc126": 8.28,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-12",
+      "spy_close": 679.41,
+      "ema200": 650.55,
+      "adx": 11.3,
+      "plus_di": 18.5,
+      "minus_di": 28.1,
+      "roc126": 6.25,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-13",
+      "spy_close": 679.89,
+      "ema200": 650.84,
+      "adx": 12.3,
+      "plus_di": 17.1,
+      "minus_di": 28.5,
+      "roc126": 6.31,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-17",
+      "spy_close": 680.99,
+      "ema200": 651.14,
+      "adx": 13.4,
+      "plus_di": 15.7,
+      "minus_di": 27.7,
+      "roc126": 6.73,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-18",
+      "spy_close": 684.42,
+      "ema200": 651.47,
+      "adx": 13.7,
+      "plus_di": 18.5,
+      "minus_di": 26.2,
+      "roc126": 7.29,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-19",
+      "spy_close": 682.62,
+      "ema200": 651.78,
+      "adx": 14.1,
+      "plus_di": 17.7,
+      "minus_di": 26.2,
+      "roc126": 7.6,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-20",
+      "spy_close": 687.55,
+      "ema200": 652.14,
+      "adx": 13.8,
+      "plus_di": 19.9,
+      "minus_di": 24.3,
+      "roc126": 8.66,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-23",
+      "spy_close": 680.53,
+      "ema200": 652.42,
+      "adx": 13.7,
+      "plus_di": 18.2,
+      "minus_di": 23.4,
+      "roc126": 7.99,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-24",
+      "spy_close": 685.48,
+      "ema200": 652.75,
+      "adx": 13.6,
+      "plus_di": 16.9,
+      "minus_di": 22.0,
+      "roc126": 7.13,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-25",
+      "spy_close": 691.26,
+      "ema200": 653.13,
+      "adx": 12.7,
+      "plus_di": 20.7,
+      "minus_di": 20.7,
+      "roc126": 8.51,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-26",
+      "spy_close": 687.42,
+      "ema200": 653.47,
+      "adx": 12.6,
+      "plus_di": 19.0,
+      "minus_di": 24.2,
+      "roc126": 7.45,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-02-27",
+      "spy_close": 684.12,
+      "ema200": 653.78,
+      "adx": 12.9,
+      "plus_di": 17.7,
+      "minus_di": 25.0,
+      "roc126": 6.7,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-02",
+      "spy_close": 684.51,
+      "ema200": 654.08,
+      "adx": 13.7,
+      "plus_di": 16.1,
+      "minus_di": 25.8,
+      "roc126": 6.38,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-03",
+      "spy_close": 678.48,
+      "ema200": 654.33,
+      "adx": 15.2,
+      "plus_di": 13.9,
+      "minus_di": 29.1,
+      "roc126": 6.07,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-04",
+      "spy_close": 683.26,
+      "ema200": 654.61,
+      "adx": 15.8,
+      "plus_di": 16.7,
+      "minus_di": 27.3,
+      "roc126": 7.62,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-05",
+      "spy_close": 679.45,
+      "ema200": 654.86,
+      "adx": 16.8,
+      "plus_di": 15.4,
+      "minus_di": 28.4,
+      "roc126": 6.44,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-06",
+      "spy_close": 670.55,
+      "ema200": 655.02,
+      "adx": 18.3,
+      "plus_di": 14.0,
+      "minus_di": 30.4,
+      "roc126": 4.18,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-09",
+      "spy_close": 676.42,
+      "ema200": 655.23,
+      "adx": 20.2,
+      "plus_di": 12.2,
+      "minus_di": 31.9,
+      "roc126": 5.4,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-10",
+      "spy_close": 675.34,
+      "ema200": 655.43,
+      "adx": 21.3,
+      "plus_di": 13.9,
+      "minus_di": 29.9,
+      "roc126": 4.97,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-11",
+      "spy_close": 674.49,
+      "ema200": 655.62,
+      "adx": 22.5,
+      "plus_di": 13.2,
+      "minus_di": 29.4,
+      "roc126": 4.59,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-12",
+      "spy_close": 664.25,
+      "ema200": 655.71,
+      "adx": 24.2,
+      "plus_di": 12.2,
+      "minus_di": 32.8,
+      "roc126": 2.71,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-13",
+      "spy_close": 660.49,
+      "ema200": 655.75,
+      "adx": 26.0,
+      "plus_di": 11.2,
+      "minus_di": 33.4,
+      "roc126": 1.29,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-16",
+      "spy_close": 667.21,
+      "ema200": 655.87,
+      "adx": 27.7,
+      "plus_di": 10.4,
+      "minus_di": 31.0,
+      "roc126": 2.35,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-17",
+      "spy_close": 668.96,
+      "ema200": 656.0,
+      "adx": 28.8,
+      "plus_di": 11.8,
+      "minus_di": 29.7,
+      "roc126": 2.08,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-18",
+      "spy_close": 659.63,
+      "ema200": 656.03,
+      "adx": 30.5,
+      "plus_di": 10.9,
+      "minus_di": 34.1,
+      "roc126": 0.79,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-19",
+      "spy_close": 658.0,
+      "ema200": 656.05,
+      "adx": 32.3,
+      "plus_di": 10.2,
+      "minus_di": 36.7,
+      "roc126": 0.67,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-20",
+      "spy_close": 648.57,
+      "ema200": 655.98,
+      "adx": 34.4,
+      "plus_di": 9.2,
+      "minus_di": 39.5,
+      "roc126": -1.24,
+      "raw_score": 0,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-23",
+      "spy_close": 655.38,
+      "ema200": 655.97,
+      "adx": 35.4,
+      "plus_di": 12.6,
+      "minus_di": 35.5,
+      "roc126": -0.69,
+      "raw_score": 0,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-03-24",
+      "spy_close": 653.18,
+      "ema200": 655.95,
+      "adx": 36.5,
+      "plus_di": 11.9,
+      "minus_di": 36.6,
+      "roc126": -1.49,
+      "raw_score": 0,
+      "confirmed_alloc": 0.0
+    }
+  ]
+}

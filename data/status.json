@@ -8,7 +8,7 @@
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 653.18 < EMA200 657.26"
+        "detail": "SPY 653.18 < EMA200 655.95"
       },
       "adx_di": {
         "value": false,
@@ -19,6 +19,7 @@
         "detail": "ROC126 -1.5% < 0"
       }
     },
+    "days_at_confirmed": 1,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -30,10 +31,30 @@
       "AMZN",
       "GOOG"
     ],
+    "cash_etf": "SGOV",
     "target_alloc": {
       "equities": 0.0,
       "sgov": 1.0
     }
   },
+  "dca": {
+    "monthly_deposit": 3000,
+    "per_stock": 0.0,
+    "sgov": 3000.0
+  },
+  "watch": [
+    {
+      "icon": "below",
+      "text": "SPY is 0.4% below EMA200 \u2014 needs to cross above for +1 point"
+    },
+    {
+      "icon": "warning",
+      "text": "ADX at 36.5 (above 25), but +DI < -DI"
+    },
+    {
+      "icon": "below",
+      "text": "6-month momentum is negative (-1.5%) \u2014 watch for turn positive"
+    }
+  ],
   "action_required": "NONE"
 }
