@@ -16,7 +16,7 @@
   h1 { font-size: 1.4em; margin-bottom: 4px; }
   .subtitle { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
-  .card-title { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 12px; }
+  .card-title { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .signal-badge { display: inline-block; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 1.1em; }
   .signal-100 { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
   .signal-66 { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
@@ -35,12 +35,17 @@
   .pending-box .title { color: var(--yellow); font-weight: 600; margin-bottom: 4px; }
   .watch-item { padding: 6px 0; display: flex; gap: 8px; align-items: flex-start; }
   .watch-icon { flex-shrink: 0; }
-  .chart-container { position: relative; width: 100%; margin-top: 8px; }
-  .chart-container canvas { width: 100% !important; }
-  .chart-tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
-  .chart-tab { padding: 5px 12px; border-radius: 4px; font-size: 0.75em; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.15s; }
-  .chart-tab:hover { border-color: var(--accent); color: var(--text); }
-  .chart-tab.active { background: rgba(88,166,255,0.15); border-color: var(--accent); color: var(--accent); }
+  .chart-container { position: relative; width: 100%; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  @media (max-width: 600px) { .chart-row { grid-template-columns: 1fr; } }
+  .period-selector { display: flex; gap: 4px; }
+  .period-btn { padding: 3px 10px; border-radius: 4px; font-size: 0.7em; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.15s; }
+  .period-btn:hover { border-color: var(--accent); color: var(--text); }
+  .period-btn.active { background: rgba(88,166,255,0.15); border-color: var(--accent); color: var(--accent); }
+  .info-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: rgba(139,148,158,0.2); color: var(--muted); font-size: 0.6em; font-weight: 700; cursor: help; position: relative; flex-shrink: 0; }
+  .tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1c2128; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; font-size: 11px; line-height: 1.5; color: var(--text); width: 280px; z-index: 100; text-transform: none; letter-spacing: normal; font-weight: 400; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+  .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--border); }
+  .info-icon:hover .tooltip, .info-icon:focus .tooltip { display: block; }
   table.history { width: 100%; border-collapse: collapse; font-size: 0.8em; margin-top: 8px; }
   table.history th { color: var(--muted); text-transform: uppercase; font-size: 0.7em; letter-spacing: 0.03em; padding: 6px 6px; text-align: right; border-bottom: 1px solid var(--border); }
   table.history th:first-child { text-align: left; }
@@ -67,198 +72,151 @@ const ALLOC_COLORS = { 100: '#3fb950', 66: '#d29922', 33: '#db6d28', 0: '#f85149
 const ALLOC_STATUS = { 1.0: 'FULL RISK-ON', 0.66: 'MODERATE', 0.33: 'DEFENSIVE', 0.0: 'FULL RISK-OFF' };
 const CHART_GRID = 'rgba(48,54,61,0.5)';
 const CHART_TEXT = '#8b949e';
+const PERIODS = [
+  { label: '15D', days: 15 },
+  { label: '30D', days: 30 },
+  { label: '60D', days: 60 },
+  { label: '90D', days: 90 },
+];
+
+const TOOLTIPS = {
+  ema200: `<strong>EMA 200 (Trend)</strong><br>
+    Exponential Moving Average of the last 200 trading days.<br><br>
+    <em>Calculation:</em> Recursive weighted average where recent prices have more weight. Uses pandas <code>ewm(span=200, adjust=False)</code>.<br><br>
+    <em>Interpretation:</em> When price is <strong>above</strong> EMA200, the long-term trend is bullish (+1 point). When below, bearish (0 points).`,
+  adx_di: `<strong>ADX + Directional Index (Strength)</strong><br>
+    ADX measures trend <em>strength</em> (not direction). +DI/-DI measure direction.<br><br>
+    <em>Calculation:</em> Uses Wilder smoothing (alpha=1/14). ADX is the smoothed average of the Directional Index. +DI = bullish pressure, -DI = bearish pressure.<br><br>
+    <em>Interpretation:</em> ADX > 25 = strong trend. If also +DI > -DI, the strong trend is bullish (+1 point). Both conditions must be true.`,
+  roc126: `<strong>ROC 126 (Momentum)</strong><br>
+    Rate of Change over 126 trading days (~6 months).<br><br>
+    <em>Calculation:</em> <code>(price_today / price_126_days_ago) - 1</code><br><br>
+    <em>Interpretation:</em> Positive ROC = price is higher than 6 months ago, momentum is up (+1 point). Negative = momentum is down (0 points).`,
+  confirmed: `<strong>3-Day Confirmation Rule</strong><br>
+    The allocation level only changes after the raw score stays at the new level for <strong>3 consecutive trading days</strong>.<br><br>
+    This prevents whipsaw — frequent changes that generate transaction costs without improving returns.`,
+};
 
 function allocClass(a) { return 'signal-' + Math.round(a * 100); }
 function dotColor(a) {
   const c = Math.round((a !== null && a !== undefined ? a : 0) * 100);
   return ALLOC_COLORS[c] || '#8b949e';
 }
+function infoIcon(key) {
+  if (!TOOLTIPS[key]) return '';
+  return `<span class="info-icon" tabindex="0">?<span class="tooltip">${TOOLTIPS[key]}</span></span>`;
+}
 
 // ── Chart defaults
 Chart.defaults.color = CHART_TEXT;
 Chart.defaults.borderColor = CHART_GRID;
-Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 Chart.defaults.font.size = 11;
 
-let charts = {};
+let state = { charts: {}, fullHistory: [], period: 30 };
 
-function createPriceChart(ctx, history) {
-  const labels = history.map(h => h.date.slice(5)); // MM-DD
+function sliceHistory(n) {
+  const h = state.fullHistory;
+  return n >= h.length ? h : h.slice(h.length - n);
+}
+
+function buildPriceChart(ctx, data) {
   return new Chart(ctx, {
     type: 'line',
     data: {
-      labels,
+      labels: data.map(h => h.date.slice(5)),
       datasets: [
-        {
-          label: 'SPY Close',
-          data: history.map(h => h.spy_close),
-          borderColor: '#58a6ff',
-          backgroundColor: 'rgba(88,166,255,0.1)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 0,
-          pointHitRadius: 8,
-          borderWidth: 2,
-        },
-        {
-          label: 'EMA 200',
-          data: history.map(h => h.ema200),
-          borderColor: '#f0883e',
-          borderDash: [6, 3],
-          tension: 0.3,
-          pointRadius: 0,
-          pointHitRadius: 8,
-          borderWidth: 1.5,
-        }
+        { label: 'SPY Close', data: data.map(h => h.spy_close), borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.08)', fill: true, tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
+        { label: 'EMA 200', data: data.map(h => h.ema200), borderColor: '#f0883e', borderDash: [6,3], tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { position: 'right', grid: { color: CHART_GRID } }
-      }
+      plugins: { legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } },
+      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
     }
   });
 }
 
-function createADXChart(ctx, history) {
-  const labels = history.map(h => h.date.slice(5));
+function buildADXChart(ctx, data) {
   return new Chart(ctx, {
     type: 'line',
     data: {
-      labels,
+      labels: data.map(h => h.date.slice(5)),
       datasets: [
-        {
-          label: 'ADX',
-          data: history.map(h => h.adx),
-          borderColor: '#bc8cff',
-          tension: 0.3,
-          pointRadius: 0,
-          pointHitRadius: 8,
-          borderWidth: 2,
-        },
-        {
-          label: '+DI',
-          data: history.map(h => h.plus_di),
-          borderColor: '#3fb950',
-          tension: 0.3,
-          pointRadius: 0,
-          pointHitRadius: 8,
-          borderWidth: 1.5,
-        },
-        {
-          label: '-DI',
-          data: history.map(h => h.minus_di),
-          borderColor: '#f85149',
-          tension: 0.3,
-          pointRadius: 0,
-          pointHitRadius: 8,
-          borderWidth: 1.5,
-        },
-        {
-          label: 'Threshold (25)',
-          data: history.map(() => 25),
-          borderColor: 'rgba(139,148,158,0.4)',
-          borderDash: [4, 4],
-          pointRadius: 0,
-          borderWidth: 1,
-        }
+        { label: 'ADX', data: data.map(h => h.adx), borderColor: '#bc8cff', tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
+        { label: '+DI', data: data.map(h => h.plus_di), borderColor: '#3fb950', tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
+        { label: '-DI', data: data.map(h => h.minus_di), borderColor: '#f85149', tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
+        { label: 'Threshold', data: data.map(() => 25), borderColor: 'rgba(139,148,158,0.35)', borderDash: [4,4], pointRadius: 0, borderWidth: 1 },
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { position: 'right', grid: { color: CHART_GRID }, min: 0 }
-      }
+      plugins: { legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } },
+      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { position: 'right', grid: { color: CHART_GRID }, min: 0 } }
     }
   });
 }
 
-function createROCChart(ctx, history) {
-  const labels = history.map(h => h.date.slice(5));
-  const data = history.map(h => h.roc126);
-  const colors = data.map(v => v !== null && v >= 0 ? 'rgba(63,185,80,0.7)' : 'rgba(248,81,73,0.7)');
+function buildROCChart(ctx, data) {
+  const vals = data.map(h => h.roc126);
+  const colors = vals.map(v => v !== null && v >= 0 ? 'rgba(63,185,80,0.7)' : 'rgba(248,81,73,0.7)');
   return new Chart(ctx, {
     type: 'bar',
     data: {
-      labels,
-      datasets: [{
-        label: 'ROC 126d (%)',
-        data,
-        backgroundColor: colors,
-        borderRadius: 2,
-      }]
+      labels: data.map(h => h.date.slice(5)),
+      datasets: [{ label: 'ROC 126d (%)', data: vals, backgroundColor: colors, borderRadius: 2 }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { position: 'right', grid: { color: CHART_GRID } }
-      }
+      plugins: { legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } },
+      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
     }
   });
 }
 
-function createAllocChart(ctx, history) {
-  const labels = history.map(h => h.date.slice(5));
-  const data = history.map(h => h.confirmed_alloc !== null ? Math.round(h.confirmed_alloc * 100) : null);
-  const colors = data.map(v => dotColor((v || 0) / 100));
-  return new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Confirmed Allocation (%)',
-        data,
-        borderColor: '#58a6ff',
-        backgroundColor: 'rgba(88,166,255,0.1)',
-        fill: true,
-        stepped: 'before',
-        pointRadius: 3,
-        pointBackgroundColor: colors,
-        pointBorderColor: colors,
-        borderWidth: 2,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 12, padding: 16 } } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { position: 'right', grid: { color: CHART_GRID }, min: 0, max: 100,
-          ticks: { callback: v => v + '%' } }
-      }
-    }
-  });
+function destroyCharts() {
+  for (const c of Object.values(state.charts)) { if (c) c.destroy(); }
+  state.charts = {};
 }
 
-const CHART_BUILDERS = {
-  price: { label: 'SPY + EMA200', fn: createPriceChart },
-  adx:   { label: 'ADX + DI',    fn: createADXChart },
-  roc:   { label: 'ROC 126d',    fn: createROCChart },
-  alloc: { label: 'Allocation',  fn: createAllocChart },
-};
+function refreshCharts() {
+  destroyCharts();
+  const data = sliceHistory(state.period);
+  if (data.length < 2) return;
+  state.charts.price = buildPriceChart(document.getElementById('chart-price').getContext('2d'), data);
+  state.charts.adx = buildADXChart(document.getElementById('chart-adx').getContext('2d'), data);
+  state.charts.roc = buildROCChart(document.getElementById('chart-roc').getContext('2d'), data);
+}
 
-function switchChart(key, history) {
-  document.querySelectorAll('.chart-tab').forEach(t => t.classList.toggle('active', t.dataset.key === key));
-  const container = document.getElementById('chart-area');
-  container.innerHTML = '<canvas id="main-chart"></canvas>';
-  if (charts.current) charts.current.destroy();
-  const ctx = document.getElementById('main-chart').getContext('2d');
-  charts.current = CHART_BUILDERS[key].fn(ctx, history);
+function setPeriod(days) {
+  state.period = days;
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.toggle('active', +b.dataset.days === days));
+  refreshCharts();
+  // Update history table
+  renderHistoryTable();
+}
+
+function renderHistoryTable() {
+  const data = sliceHistory(state.period);
+  const reversed = [...data].reverse();
+  let html = '';
+  for (const h of reversed) {
+    const ac = dotColor(h.confirmed_alloc);
+    const al = h.confirmed_alloc !== null ? Math.round(h.confirmed_alloc * 100) + '%' : '—';
+    html += `<tr>
+      <td>${h.date}</td><td>$${h.spy_close.toFixed(2)}</td><td>$${h.ema200.toFixed(2)}</td>
+      <td>${h.adx.toFixed(1)}</td><td>${h.plus_di.toFixed(1)} / ${h.minus_di.toFixed(1)}</td>
+      <td>${h.roc126 !== null ? h.roc126.toFixed(1)+'%' : '—'}</td>
+      <td>${h.raw_score !== null ? h.raw_score+'/3' : '—'}</td>
+      <td><span class="alloc-dot" style="background:${ac}"></span>${al}</td>
+    </tr>`;
+  }
+  const tbody = document.getElementById('history-body');
+  if (tbody) tbody.innerHTML = html;
 }
 
 function render(d) {
@@ -266,12 +224,13 @@ function render(d) {
   const allocPct = Math.round(s.confirmed_allocation * 100);
   const subs = s.sub_signals;
   const history = d.history || [];
+  state.fullHistory = history;
 
   let html = '';
 
-  // ── Confirmed Signal Card
+  // ── Confirmed Signal
   html += `<div class="card">
-    <div class="card-title">Confirmed Signal</div>
+    <div class="card-title">Confirmed Signal ${infoIcon('confirmed')}</div>
     <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap">
       <span class="signal-badge ${allocClass(s.confirmed_allocation)}">${ALLOC_STATUS[s.confirmed_allocation] || allocPct+'%'}</span>
       <span style="color:var(--muted)">Active for ${s.days_at_confirmed || '?'} trading days</span>
@@ -282,7 +241,6 @@ function render(d) {
       <div class="metric"><div class="metric-value">${s.raw_score}/3</div><div class="metric-label">Raw Score</div></div>
       <div class="metric"><div class="metric-value">${d.date}</div><div class="metric-label">Last Updated</div></div>
     </div>`;
-
   if (s.pending_change) {
     const pc = s.pending_change;
     const pAlloc = Math.round(pc.pending_alloc * 100);
@@ -294,25 +252,41 @@ function render(d) {
   }
   html += `</div>`;
 
-  // ── Charts Card
+  // ── Charts
   if (history.length > 1) {
     html += `<div class="card">
-      <div class="card-title">Charts</div>
-      <div class="chart-tabs">`;
-    for (const [key, cfg] of Object.entries(CHART_BUILDERS)) {
-      html += `<button class="chart-tab${key === 'price' ? ' active' : ''}" data-key="${key}">${cfg.label}</button>`;
+      <div class="card-title" style="justify-content:space-between; flex-wrap:wrap">
+        <span>Charts</span>
+        <div class="period-selector">`;
+    for (const p of PERIODS) {
+      const active = p.days === state.period ? ' active' : '';
+      const disabled = p.days > history.length ? ' style="opacity:0.4;pointer-events:none"' : '';
+      html += `<button class="period-btn${active}" data-days="${p.days}"${disabled}>${p.label}</button>`;
     }
-    html += `</div><div id="chart-area" class="chart-container" style="height:280px"><canvas id="main-chart"></canvas></div></div>`;
+    html += `</div></div>
+      <div class="chart-container" style="height:260px"><canvas id="chart-price"></canvas></div>
+      <div class="chart-row">
+        <div>
+          <div style="font-size:0.75em;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:6px">ADX + DIRECTIONAL INDEX ${infoIcon('adx_di')}</div>
+          <div class="chart-container" style="height:180px"><canvas id="chart-adx"></canvas></div>
+        </div>
+        <div>
+          <div style="font-size:0.75em;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:6px">RATE OF CHANGE 126D ${infoIcon('roc126')}</div>
+          <div class="chart-container" style="height:180px"><canvas id="chart-roc"></canvas></div>
+        </div>
+      </div>
+    </div>`;
   }
 
-  // ── Sub-signals Card
-  html += `<div class="card"><div class="card-title">E2 Score Breakdown</div>`;
+  // ── Sub-signals
   const subNames = { ema200: 'Trend (EMA200)', adx_di: 'Strength (ADX + DI)', roc126: 'Momentum (ROC 126d)' };
+  html += `<div class="card"><div class="card-title">E2 Score Breakdown</div>`;
   for (const [key, sub] of Object.entries(subs)) {
     const on = sub.value;
     html += `<div class="sub-signal">
       <div class="check ${on ? 'check-on' : 'check-off'}">${on ? '+' : '-'}</div>
-      <div><strong>${subNames[key] || key}</strong><br><span style="color:var(--muted);font-size:0.85em">${sub.detail}</span></div>
+      <div style="flex:1"><strong>${subNames[key] || key}</strong><br><span style="color:var(--muted);font-size:0.85em">${sub.detail}</span></div>
+      ${infoIcon(key)}
     </div>`;
   }
   html += `</div>`;
@@ -329,44 +303,26 @@ function render(d) {
     html += `</div>`;
   }
 
-  // ── Recent History (newest first)
+  // ── History
   if (history.length) {
-    const reversed = [...history].reverse();
-    html += `<div class="card"><div class="card-title">Recent Signal History (${history.length} days)</div>
+    html += `<div class="card"><div class="card-title">Signal History</div>
       <div style="overflow-x:auto"><table class="history"><thead>
         <tr><th>Date</th><th>SPY</th><th>EMA200</th><th>ADX</th><th>+DI/-DI</th><th>ROC</th><th>Score</th><th>Alloc</th></tr>
-      </thead><tbody>`;
-    for (const h of reversed) {
-      const aColor = dotColor(h.confirmed_alloc);
-      const allocLabel = h.confirmed_alloc !== null ? Math.round(h.confirmed_alloc * 100) + '%' : '—';
-      html += `<tr>
-        <td>${h.date}</td>
-        <td>$${h.spy_close.toFixed(2)}</td>
-        <td>$${h.ema200.toFixed(2)}</td>
-        <td>${h.adx.toFixed(1)}</td>
-        <td>${h.plus_di.toFixed(1)} / ${h.minus_di.toFixed(1)}</td>
-        <td>${h.roc126 !== null ? h.roc126.toFixed(1) + '%' : '—'}</td>
-        <td>${h.raw_score !== null ? h.raw_score + '/3' : '—'}</td>
-        <td><span class="alloc-dot" style="background:${aColor}"></span>${allocLabel}</td>
-      </tr>`;
-    }
-    html += `</tbody></table></div></div>`;
+      </thead><tbody id="history-body"></tbody></table></div></div>`;
   }
 
   document.getElementById('app').innerHTML = html;
 
-  // ── Initialize charts after DOM is ready
+  // ── Init charts + period buttons
   if (history.length > 1) {
-    document.querySelectorAll('.chart-tab').forEach(tab => {
-      tab.addEventListener('click', () => switchChart(tab.dataset.key, history));
+    refreshCharts();
+    document.querySelectorAll('.period-btn').forEach(btn => {
+      btn.addEventListener('click', () => setPeriod(+btn.dataset.days));
     });
-    // Render default chart
-    const ctx = document.getElementById('main-chart').getContext('2d');
-    charts.current = createPriceChart(ctx, history);
   }
+  renderHistoryTable();
 }
 
-// Load data
 fetch('data.json')
   .then(r => r.json())
   .then(render)
