@@ -95,7 +95,7 @@ def append_signal_log(result: dict, prev_alloc: float | None) -> None:
     return action
 
 
-def build_recent_history(result: dict, df: pd.DataFrame, n: int = 30) -> list[dict]:
+def build_recent_history(result: dict, df: pd.DataFrame, n: int = 90) -> list[dict]:
     """Build recent history for dashboard."""
     signals = result["full_signals"]
     confirmation = result["full_confirmation"]
