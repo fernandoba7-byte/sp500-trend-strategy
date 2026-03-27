@@ -23,7 +23,7 @@ def download_prices(
     Returns:
         DataFrame with columns [open, high, low, close, volume] indexed by date.
     """
-    end = pd.Timestamp.now()
+    end = pd.Timestamp.now() + pd.Timedelta(days=1)  # yfinance end is exclusive
     start = end - pd.Timedelta(days=lookback_days)
 
     data = yf.download(ticker, start=start.strftime("%Y-%m-%d"), end=end.strftime("%Y-%m-%d"), progress=False)
