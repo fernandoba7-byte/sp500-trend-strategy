@@ -8,7 +8,7 @@
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 634.09 < EMA200 655.58"
+        "detail": "SPY 634.09 < EMA200 655.46"
       },
       "adx_di": {
         "value": false,
