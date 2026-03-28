@@ -409,7 +409,7 @@ function render(d) {
   renderHistoryTable();
 }
 
-fetch('data.json')
+fetch('data.json?v=' + Date.now())
   .then(r => r.json())
   .then(render)
   .catch(err => {
