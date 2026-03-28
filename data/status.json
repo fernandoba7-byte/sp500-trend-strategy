@@ -1,14 +1,14 @@
 {
   "date": "2026-03-27",
   "signal": {
-    "confirmed_allocation": 0.0,
-    "allocation_label": "0% Equities / 100% SGOV",
+    "confirmed_allocation": 0.66,
+    "allocation_label": "66% Equities / 34% SGOV",
     "raw_score": 0,
-    "confirmed_score": 0,
+    "confirmed_score": 2,
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 634.09 < EMA200 655.46"
+        "detail": "SPY 634.09 < EMA200 653.78"
       },
       "adx_di": {
         "value": false,
@@ -19,9 +19,14 @@
         "detail": "ROC126 -3.1% < 0"
       }
     },
-    "days_at_confirmed": 4,
-    "days_at_pending": 0,
-    "pending_change": null
+    "days_at_confirmed": 114,
+    "days_at_pending": 2,
+    "pending_change": {
+      "pending_score": 0,
+      "pending_alloc": 0.0,
+      "days_counted": 2,
+      "days_remaining": 1
+    }
   },
   "portfolio": {
     "tickers": [
@@ -33,19 +38,19 @@
     ],
     "cash_etf": "SGOV",
     "target_alloc": {
-      "equities": 0.0,
-      "sgov": 1.0
+      "equities": 0.66,
+      "sgov": 0.34
     }
   },
   "dca": {
     "monthly_deposit": 3000,
-    "per_stock": 0.0,
-    "sgov": 3000.0
+    "per_stock": 396.0,
+    "sgov": 1020.0
   },
   "watch": [
     {
       "icon": "below",
-      "text": "SPY is 3.3% below EMA200 \u2014 needs to cross above for +1 point"
+      "text": "SPY is 3.0% below EMA200 \u2014 needs to cross above for +1 point"
     },
     {
       "icon": "warning",
@@ -56,5 +61,5 @@
       "text": "6-month momentum is negative (-3.1%) \u2014 watch for turn positive"
     }
   ],
-  "action_required": "NONE"
+  "action_required": "INCREASE_EQUITY"
 }
