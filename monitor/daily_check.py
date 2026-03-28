@@ -296,7 +296,7 @@ def main():
     result = compute_e2_signal(df, config["signal"])
 
     # Build recent history and days at confirmed level
-    result["_history"] = build_recent_history(result, df, n=30)
+    result["_history"] = build_recent_history(result, df, n=252)
     days_at_confirmed = compute_days_at_confirmed(result["full_confirmation"])
 
     prev_alloc = get_previous_alloc()

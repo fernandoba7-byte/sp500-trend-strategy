@@ -37,7 +37,15 @@
   .watch-icon { flex-shrink: 0; }
   .chart-container { position: relative; width: 100%; }
   .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
-  @media (max-width: 600px) { .chart-row { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .chart-row { grid-template-columns: 1fr; }
+    body { padding: 12px; }
+    .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    .period-selector { flex-wrap: wrap; }
+    .card-title { flex-direction: column; align-items: flex-start; gap: 8px; }
+    table.history { font-size: 0.7em; }
+    table.history th:nth-child(n+4), table.history td:nth-child(n+4) { display: none; }
+  }
   .period-selector { display: flex; gap: 4px; }
   .period-btn { padding: 3px 10px; border-radius: 4px; font-size: 0.7em; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.15s; }
   .period-btn:hover { border-color: var(--accent); color: var(--text); }
@@ -73,10 +81,11 @@ const ALLOC_STATUS = { 1.0: 'FULL RISK-ON', 0.66: 'MODERATE', 0.33: 'DEFENSIVE',
 const CHART_GRID = 'rgba(48,54,61,0.5)';
 const CHART_TEXT = '#8b949e';
 const PERIODS = [
-  { label: '15D', days: 15 },
-  { label: '30D', days: 30 },
-  { label: '60D', days: 60 },
-  { label: '90D', days: 90 },
+  { label: '1W', days: 5 },
+  { label: '1M', days: 21 },
+  { label: '3M', days: 63 },
+  { label: '6M', days: 126 },
+  { label: '1Y', days: 252 },
 ];
 
 const TOOLTIPS = {
@@ -113,7 +122,37 @@ Chart.defaults.borderColor = CHART_GRID;
 Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 Chart.defaults.font.size = 11;
 
-let state = { charts: {}, fullHistory: [], period: 30 };
+const crosshairPlugin = {
+  id: 'crosshair',
+  afterDraw(chart) {
+    if (chart.tooltip?._active?.length) {
+      const x = chart.tooltip._active[0].element.x;
+      const yAxis = chart.scales.y;
+      const ctx = chart.ctx;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, yAxis.top);
+      ctx.lineTo(x, yAxis.bottom);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(139,148,158,0.4)';
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+};
+Chart.register(crosshairPlugin);
+
+const TOOLTIP_STYLE = {
+  backgroundColor: '#1c2128',
+  borderColor: '#30363d',
+  borderWidth: 1,
+  titleFont: { size: 11 },
+  bodyFont: { family: "'SF Mono', 'Fira Code', monospace", size: 11 },
+  padding: 10,
+};
+
+let state = { charts: {}, fullHistory: [], period: 21 };
 
 function sliceHistory(n) {
   const h = state.fullHistory;
@@ -126,15 +165,18 @@ function buildPriceChart(ctx, data) {
     data: {
       labels: data.map(h => h.date.slice(5)),
       datasets: [
-        { label: 'SPY Close', data: data.map(h => h.spy_close), borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.08)', fill: true, tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
-        { label: 'EMA 200', data: data.map(h => h.ema200), borderColor: '#f0883e', borderDash: [6,3], tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
+        { label: 'SPY Close', data: data.map(h => h.spy_close), borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.08)', fill: true, tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
+        { label: 'EMA 200', data: data.map(h => h.ema200), borderColor: '#f0883e', borderDash: [6,3], tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } },
-      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
+      plugins: {
+        legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } },
+        tooltip: { ...TOOLTIP_STYLE, callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}` } }
+      },
+      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
     }
   });
 }
@@ -145,17 +187,20 @@ function buildADXChart(ctx, data) {
     data: {
       labels: data.map(h => h.date.slice(5)),
       datasets: [
-        { label: 'ADX', data: data.map(h => h.adx), borderColor: '#bc8cff', tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
-        { label: '+DI', data: data.map(h => h.plus_di), borderColor: '#3fb950', tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
-        { label: '-DI', data: data.map(h => h.minus_di), borderColor: '#f85149', tension: 0.3, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
+        { label: 'ADX', data: data.map(h => h.adx), borderColor: '#bc8cff', tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
+        { label: '+DI', data: data.map(h => h.plus_di), borderColor: '#3fb950', tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
+        { label: '-DI', data: data.map(h => h.minus_di), borderColor: '#f85149', tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
         { label: 'Threshold', data: data.map(() => 25), borderColor: 'rgba(139,148,158,0.35)', borderDash: [4,4], pointRadius: 0, borderWidth: 1 },
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } },
-      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { position: 'right', grid: { color: CHART_GRID }, min: 0 } }
+      plugins: {
+        legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } },
+        tooltip: { ...TOOLTIP_STYLE, callbacks: { label: ctx => ctx.dataset.label === 'Threshold' ? null : `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}` } }
+      },
+      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } }, y: { position: 'right', grid: { color: CHART_GRID }, min: 0 } }
     }
   });
 }
@@ -172,8 +217,43 @@ function buildROCChart(ctx, data) {
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { intersect: false, mode: 'index' },
-      plugins: { legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } },
-      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
+      plugins: {
+        legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } },
+        tooltip: { ...TOOLTIP_STYLE, callbacks: { label: ctx => `ROC 126d: ${ctx.parsed.y.toFixed(2)}%` } }
+      },
+      scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
+    }
+  });
+}
+
+function buildAllocChart(ctx, data) {
+  const colors = data.map(h => {
+    const pct = Math.round((h.confirmed_alloc ?? 0) * 100);
+    return ALLOC_COLORS[pct] || '#8b949e';
+  });
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.map(h => h.date.slice(5)),
+      datasets: [{
+        label: 'Allocation',
+        data: data.map(h => (h.confirmed_alloc ?? 0) * 100),
+        backgroundColor: colors,
+        borderRadius: 0,
+        barPercentage: 1.0,
+        categoryPercentage: 1.0,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { ...TOOLTIP_STYLE, callbacks: { label: ctx => `Allocation: ${ctx.parsed.y}% equities` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } },
+        y: { position: 'right', min: 0, max: 100, ticks: { stepSize: 33, callback: v => v + '%' }, grid: { color: CHART_GRID } }
+      }
     }
   });
 }
@@ -190,6 +270,8 @@ function refreshCharts() {
   state.charts.price = buildPriceChart(document.getElementById('chart-price').getContext('2d'), data);
   state.charts.adx = buildADXChart(document.getElementById('chart-adx').getContext('2d'), data);
   state.charts.roc = buildROCChart(document.getElementById('chart-roc').getContext('2d'), data);
+  const allocCanvas = document.getElementById('chart-alloc');
+  if (allocCanvas) state.charts.alloc = buildAllocChart(allocCanvas.getContext('2d'), data);
 }
 
 function setPeriod(days) {
@@ -274,6 +356,10 @@ function render(d) {
           <div style="font-size:0.75em;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:6px">RATE OF CHANGE 126D ${infoIcon('roc126')}</div>
           <div class="chart-container" style="height:180px"><canvas id="chart-roc"></canvas></div>
         </div>
+      </div>
+      <div style="margin-top:12px">
+        <div style="font-size:0.75em;color:var(--muted);margin-bottom:4px">ALLOCATION TIMELINE</div>
+        <div class="chart-container" style="height:80px"><canvas id="chart-alloc"></canvas></div>
       </div>
     </div>`;
   }
