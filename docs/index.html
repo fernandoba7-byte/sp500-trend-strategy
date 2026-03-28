@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SP500 Trend Strategy — E2 Signal Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 <style>
   :root {
     --bg: #0d1117; --surface: #161b22; --border: #30363d;
@@ -160,6 +161,31 @@ function sliceHistory(n) {
 }
 
 function buildPriceChart(ctx, data) {
+  // Detect allocation change points for annotations
+  const annotations = {};
+  for (let i = 1; i < data.length; i++) {
+    if (data[i].confirmed_alloc !== data[i-1].confirmed_alloc && data[i].confirmed_alloc !== null && data[i-1].confirmed_alloc !== null) {
+      const newPct = Math.round(data[i].confirmed_alloc * 100);
+      const color = ALLOC_COLORS[newPct] || '#8b949e';
+      annotations['sig' + i] = {
+        type: 'line',
+        xMin: i, xMax: i,
+        borderColor: color,
+        borderWidth: 1.5,
+        borderDash: [4, 3],
+        label: {
+          display: true,
+          content: newPct + '%',
+          position: 'start',
+          backgroundColor: color,
+          color: '#fff',
+          font: { size: 9, weight: 'bold' },
+          padding: { top: 2, bottom: 2, left: 4, right: 4 },
+          borderRadius: 3,
+        }
+      };
+    }
+  }
   return new Chart(ctx, {
     type: 'line',
     data: {
@@ -174,7 +200,8 @@ function buildPriceChart(ctx, data) {
       interaction: { intersect: false, mode: 'index' },
       plugins: {
         legend: { labels: { boxWidth: 10, padding: 12, font: { size: 10 } } },
-        tooltip: { ...TOOLTIP_STYLE, callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}` } }
+        tooltip: { ...TOOLTIP_STYLE, callbacks: { label: ctx => `${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}` } },
+        annotation: { annotations }
       },
       scales: { x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } }, y: { position: 'right', grid: { color: CHART_GRID } } }
     }
@@ -252,7 +279,7 @@ function buildAllocChart(ctx, data) {
       },
       scales: {
         x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } },
-        y: { position: 'right', min: 0, max: 100, ticks: { stepSize: 33, callback: v => v + '%' }, grid: { color: CHART_GRID } }
+        y: { position: 'right', min: 0, max: 100, afterBuildTicks: axis => { axis.ticks = [0, 33, 66, 100].map(v => ({ value: v })); }, ticks: { callback: v => v + '%' }, grid: { color: CHART_GRID } }
       }
     }
   });
@@ -263,10 +290,22 @@ function destroyCharts() {
   state.charts = {};
 }
 
+function updatePerfSummary(data) {
+  const el = document.getElementById('perf-summary');
+  if (!el || data.length < 2) return;
+  const startPrice = data[0].spy_close;
+  const endPrice = data[data.length - 1].spy_close;
+  const ret = ((endPrice / startPrice) - 1) * 100;
+  const color = ret >= 0 ? 'var(--green)' : 'var(--red)';
+  const label = PERIODS.find(p => p.days === state.period)?.label || state.period + 'D';
+  el.innerHTML = `SPY: <span style="color:${color};font-weight:600">${ret >= 0 ? '+' : ''}${ret.toFixed(2)}%</span> over ${label}`;
+}
+
 function refreshCharts() {
   destroyCharts();
   const data = sliceHistory(state.period);
   if (data.length < 2) return;
+  updatePerfSummary(data);
   state.charts.price = buildPriceChart(document.getElementById('chart-price').getContext('2d'), data);
   state.charts.adx = buildADXChart(document.getElementById('chart-adx').getContext('2d'), data);
   state.charts.roc = buildROCChart(document.getElementById('chart-roc').getContext('2d'), data);
@@ -346,6 +385,7 @@ function render(d) {
       html += `<button class="period-btn${active}" data-days="${p.days}"${disabled}>${p.label}</button>`;
     }
     html += `</div></div>
+      <div id="perf-summary" style="text-align:right;font-size:0.75em;color:var(--muted);margin-bottom:4px"></div>
       <div class="chart-container" style="height:260px"><canvas id="chart-price"></canvas></div>
       <div class="chart-row">
         <div>
