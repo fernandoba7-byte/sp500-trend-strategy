@@ -8,7 +8,43 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.indicators import ema, adx_system, roc, true_range, directional_movement, wilder_smooth
+from src.indicators import sma, ema, adx_system, roc, true_range, directional_movement, wilder_smooth
+
+
+class TestSMA:
+    def test_sma_matches_pandas_rolling(self):
+        """SMA must match pandas rolling(window=N).mean() exactly."""
+        np.random.seed(42)
+        prices = pd.Series(np.random.randn(300).cumsum() + 100)
+        period = 200
+
+        expected = prices.rolling(window=period).mean()
+        result = sma(prices, period)
+
+        pd.testing.assert_series_equal(result, expected)
+
+    def test_sma_nan_before_period(self):
+        """SMA should have NaN for the first (period-1) entries."""
+        prices = pd.Series(np.arange(50, dtype=float) + 100)
+        result = sma(prices, 20)
+        assert result.iloc[:19].isna().all()
+        assert not result.iloc[19:].isna().any()
+
+    def test_sma_constant_series(self):
+        """SMA of constant series should be that constant."""
+        prices = pd.Series([50.0] * 100)
+        result = sma(prices, 20)
+        valid = result.dropna()
+        np.testing.assert_allclose(valid.values, 50.0)
+
+    def test_sma_deterministic(self):
+        """SMA should give identical results regardless of data before the window."""
+        prices_a = pd.Series([10.0] * 100 + [50.0] * 200)
+        prices_b = pd.Series([90.0] * 100 + [50.0] * 200)
+        result_a = sma(prices_a, 200)
+        result_b = sma(prices_b, 200)
+        # After full window of identical data, values must be equal
+        assert result_a.iloc[-1] == result_b.iloc[-1] == 50.0
 
 
 class TestEMA:

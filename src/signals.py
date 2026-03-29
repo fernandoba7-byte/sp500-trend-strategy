@@ -7,7 +7,7 @@ The signal is computed on SPY and applied to the top-5 portfolio.
 import pandas as pd
 import numpy as np
 
-from src.indicators import ema, adx_system, roc
+from src.indicators import sma, ema, adx_system, roc
 
 
 def compute_sub_signals(
@@ -25,15 +25,19 @@ def compute_sub_signals(
             ema200, score_ema, adx, plus_di, minus_di, score_adx,
             roc126, score_roc, raw_score
     """
-    ema_period = config["ema_period"]
+    ma_period = config.get("ma_period", config.get("ema_period", 200))
+    ma_type = config.get("ma_type", "sma")
     adx_period = config["adx_period"]
     adx_threshold = config["adx_threshold"]
     roc_period = config["roc_period"]
 
     result = pd.DataFrame(index=df.index)
 
-    # 1. Trend: Close > EMA(200)
-    result["ema200"] = ema(df["close"], ema_period)
+    # 1. Trend: Close > MA(200)
+    if ma_type == "ema":
+        result["ema200"] = ema(df["close"], ma_period)
+    else:
+        result["ema200"] = sma(df["close"], ma_period)
     result["score_ema"] = (df["close"] > result["ema200"]).astype(int)
 
     # 2. Strength: ADX(14) > 25 AND +DI(14) > -DI(14)

@@ -12,7 +12,8 @@ from src.signals import compute_sub_signals, apply_confirmation, compute_e2_sign
 @pytest.fixture
 def signal_config():
     return {
-        "ema_period": 200,
+        "ma_type": "sma",
+        "ma_period": 200,
         "adx_period": 14,
         "adx_threshold": 25,
         "roc_period": 126,
