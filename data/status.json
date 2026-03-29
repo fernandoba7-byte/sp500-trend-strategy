@@ -8,7 +8,7 @@
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 634.09 < EMA200 653.78"
+        "detail": "SPY 634.09 < EMA200 653.60"
       },
       "adx_di": {
         "value": false,
@@ -61,5 +61,5 @@
       "text": "6-month momentum is negative (-3.1%) \u2014 watch for turn positive"
     }
   ],
-  "action_required": "INCREASE_EQUITY"
+  "action_required": "NONE"
 }
