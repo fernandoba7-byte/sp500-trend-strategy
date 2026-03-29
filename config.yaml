@@ -52,5 +52,5 @@ alerts:
 # ── Data ─────────────────────────────────────────────────────────
 data:
   source: yfinance
-  lookback_days: 500
+  lookback_days: 1500
   cache_dir: data/cache
