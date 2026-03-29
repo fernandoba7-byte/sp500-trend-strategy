@@ -30,7 +30,7 @@ Key Monte Carlo results (20-year, top-5 scaled):
 ### Signal: E2 Composite (4-Level Allocation)
 Computed daily on SPY (not on individual stocks). Three sub-signals scored 0 or 1:
 
-1. **Trend (EMA200):** Close > EMA(200) → 1 point
+1. **Trend (SMA200):** Close > SMA(200) → 1 point
 2. **Strength (ADX+DI):** ADX(14) > 25 AND +DI(14) > -DI(14) → 1 point  
 3. **Momentum (ROC126):** ROC(126 days) > 0 → 1 point
 
@@ -101,7 +101,8 @@ sp500-trend-strategy/
 ```yaml
 # ── Signal Parameters ────────────────────────────────────────────
 signal:
-  ema_period: 200
+  ma_type: sma
+  ma_period: 200
   adx_period: 14
   adx_threshold: 25
   roc_period: 126
@@ -157,7 +158,7 @@ alerts:
 # ── Data ─────────────────────────────────────────────────────────
 data:
   source: yfinance
-  lookback_days: 300  # Need 200+ for EMA200 warmup
+  lookback_days: 700  # Need 200 for SMA200 + 126 for ROC + 1Y chart
   cache_dir: data/cache
 ```
 
@@ -166,10 +167,10 @@ data:
 ### src/indicators.py
 ```python
 # All indicators must match the backtest exactly:
-# - EMA: pandas ewm(span=N, adjust=False)
+# - SMA: pandas rolling(window=N).mean()
 # - ADX: Wilder smoothing (alpha=1/period)
 # - ROC: simple (close / close_shift_N - 1)
-# 
+#
 # IMPORTANT: Use the EXACT same formulas as the backtest.
 # Any deviation will cause signal drift from tested performance.
 ```
@@ -247,7 +248,7 @@ jobs:
 
 ### data/signal_log.csv (append daily)
 ```
-date,spy_close,ema200,adx,plus_di,minus_di,roc126,score_ema,score_adx,score_roc,raw_score,confirmed_alloc,prev_alloc,action
+date,spy_close,sma200,adx,plus_di,minus_di,roc126,score_ema,score_adx,score_roc,raw_score,confirmed_alloc,prev_alloc,action
 2025-03-21,557.59,563.30,22.4,18.1,23.8,-0.02,0,0,0,0,0.33,0.33,HOLD
 ```
 
@@ -260,7 +261,7 @@ date,spy_close,ema200,adx,plus_di,minus_di,roc126,score_ema,score_adx,score_roc,
     "allocation_label": "33% Equities / 67% SGOV",
     "raw_score": 0,
     "sub_signals": {
-      "ema200": {"value": false, "detail": "SPY 557.59 < EMA200 563.30"},
+      "ema200": {"value": false, "detail": "SPY 557.59 < SMA200 563.30"},
       "adx_di": {"value": false, "detail": "ADX 22.4 < 25 threshold"},
       "roc126": {"value": false, "detail": "ROC126 -2.1% < 0"}
     },
@@ -284,7 +285,7 @@ date,spy_close,ema200,adx,plus_di,minus_di,roc126,score_ema,score_adx,score_roc,
 4. Allocation map: score 0→0%, 1→33%, 2→66%, 3→100%
 
 ### test_indicators.py must verify:
-1. EMA200 matches pandas ewm output
+1. SMA200 matches pandas rolling output
 2. ADX matches Wilder smoothing (not simple MA)
 3. +DI/-DI signs are correct (common bug: swapping +DI and -DI)
 4. ROC126 handles the 126-day lookback correctly

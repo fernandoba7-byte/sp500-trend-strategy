@@ -14,9 +14,11 @@ See PROJECT_SPEC.md for the complete specification.
 
 ## Key Technical Requirements
 
-1. **Indicator calculations must be EXACT:** EMA uses pandas `ewm(span=N, adjust=False)`. 
-   ADX uses Wilder smoothing (`ewm(alpha=1/14, adjust=False)`). Any deviation from 
-   the backtest formulas will cause signal drift.
+1. **Indicator calculations must be EXACT:** SMA uses pandas `rolling(window=N).mean()`.
+   ADX uses Wilder smoothing (`ewm(alpha=1/14, adjust=False)`). ROC is simple
+   `close / close.shift(N) - 1`. Any deviation from the backtest formulas will
+   cause signal drift. The `ma_type` and `ma_period` in config.yaml control which
+   moving average is used for the trend signal.
 
 2. **3-day confirmation is critical:** The allocation level only changes after the raw 
    score stays at the new level for 3 consecutive trading days. Without this, the 
