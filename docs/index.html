@@ -90,10 +90,10 @@ const PERIODS = [
 ];
 
 const TOOLTIPS = {
-  ema200: `<strong>EMA 200 (Trend)</strong><br>
-    Exponential Moving Average of the last 200 trading days.<br><br>
-    <em>Calculation:</em> Recursive weighted average where recent prices have more weight. Uses pandas <code>ewm(span=200, adjust=False)</code>.<br><br>
-    <em>Interpretation:</em> When price is <strong>above</strong> EMA200, the long-term trend is bullish (+1 point). When below, bearish (0 points).`,
+  ema200: `<strong>SMA 200 (Trend)</strong><br>
+    Simple Moving Average of the last 200 trading days.<br><br>
+    <em>Calculation:</em> Average of the last 200 closing prices. Uses pandas <code>rolling(200).mean()</code>.<br><br>
+    <em>Interpretation:</em> When price is <strong>above</strong> SMA200, the long-term trend is bullish (+1 point). When below, bearish (0 points).`,
   adx_di: `<strong>ADX + Directional Index (Strength)</strong><br>
     ADX measures trend <em>strength</em> (not direction). +DI/-DI measure direction.<br><br>
     <em>Calculation:</em> Uses Wilder smoothing (alpha=1/14). ADX is the smoothed average of the Directional Index. +DI = bullish pressure, -DI = bearish pressure.<br><br>
@@ -192,7 +192,7 @@ function buildPriceChart(ctx, data) {
       labels: data.map(h => h.date.slice(5)),
       datasets: [
         { label: 'SPY Close', data: data.map(h => h.spy_close), borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.08)', fill: true, tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 2 },
-        { label: 'EMA 200', data: data.map(h => h.ema200), borderColor: '#f0883e', borderDash: [6,3], tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
+        { label: 'SMA 200', data: data.map(h => h.ema200), borderColor: '#f0883e', borderDash: [6,3], tension: 0, pointRadius: 0, pointHitRadius: 8, borderWidth: 1.5 },
       ]
     },
     options: {
@@ -405,7 +405,7 @@ function render(d) {
   }
 
   // ── Sub-signals
-  const subNames = { ema200: 'Trend (EMA200)', adx_di: 'Strength (ADX + DI)', roc126: 'Momentum (ROC 126d)' };
+  const subNames = { ema200: 'Trend (SMA200)', adx_di: 'Strength (ADX + DI)', roc126: 'Momentum (ROC 126d)' };
   html += `<div class="card"><div class="card-title">E2 Score Breakdown</div>`;
   for (const [key, sub] of Object.entries(subs)) {
     const on = sub.value;
@@ -433,7 +433,7 @@ function render(d) {
   if (history.length) {
     html += `<div class="card"><div class="card-title">Signal History</div>
       <div style="overflow-x:auto"><table class="history"><thead>
-        <tr><th>Date</th><th>SPY</th><th>EMA200</th><th>ADX</th><th>+DI/-DI</th><th>ROC</th><th>Score</th><th>Alloc</th></tr>
+        <tr><th>Date</th><th>SPY</th><th>SMA200</th><th>ADX</th><th>+DI/-DI</th><th>ROC</th><th>Score</th><th>Alloc</th></tr>
       </thead><tbody id="history-body"></tbody></table></div></div>`;
   }
 
