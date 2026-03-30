@@ -1,5 +1,5 @@
 {
-  "date": "2026-03-27",
+  "date": "2026-03-30",
   "signal": {
     "confirmed_allocation": 0.0,
     "allocation_label": "0% Equities / 100% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 634.09 < EMA200 657.96"
+        "detail": "SPY 631.97 < EMA200 658.15"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 39.2 > 25, +DI 11.8 < -DI 43.6"
+        "detail": "ADX 40.7 > 25, +DI 10.8 < -DI 42.9"
       },
       "roc126": {
         "value": false,
-        "detail": "ROC126 -3.1% < 0"
+        "detail": "ROC126 -4.0% < 0"
       }
     },
-    "days_at_confirmed": 4,
+    "days_at_confirmed": 5,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,30 +45,19 @@
   "watch": [
     {
       "icon": "below",
-      "text": "SPY is 3.6% below EMA200 \u2014 needs to cross above for +1 point"
+      "text": "SPY is 4.0% below EMA200 \u2014 needs to cross above for +1 point"
     },
     {
       "icon": "warning",
-      "text": "ADX at 39.2 (above 25), but +DI < -DI"
+      "text": "ADX at 40.7 (above 25), but +DI < -DI"
     },
     {
       "icon": "below",
-      "text": "6-month momentum is negative (-3.1%) \u2014 watch for turn positive"
+      "text": "6-month momentum is negative (-4.0%) \u2014 watch for turn positive"
     }
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-03-27",
-      "spy_close": 560.65,
-      "ema200": 564.19,
-      "adx": 27.3,
-      "plus_di": 18.6,
-      "minus_di": 26.3,
-      "roc126": -0.1,
-      "raw_score": 0,
-      "confirmed_alloc": 0.33
-    },
     {
       "date": "2025-03-28",
       "spy_close": 549.36,
@@ -2827,6 +2816,17 @@
       "plus_di": 11.8,
       "minus_di": 43.6,
       "roc126": -3.09,
+      "raw_score": 0,
+      "confirmed_alloc": 0.0
+    },
+    {
+      "date": "2026-03-30",
+      "spy_close": 631.97,
+      "ema200": 658.15,
+      "adx": 40.7,
+      "plus_di": 10.8,
+      "minus_di": 42.9,
+      "roc126": -3.97,
       "raw_score": 0,
       "confirmed_alloc": 0.0
     }
