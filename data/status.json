@@ -1,5 +1,5 @@
 {
-  "date": "2026-03-30",
+  "date": "2026-03-31",
   "signal": {
     "confirmed_allocation": 0.0,
     "allocation_label": "0% Equities / 100% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 631.97 < EMA200 658.15"
+        "detail": "SPY 650.34 < EMA200 658.41"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 40.7 > 25, +DI 10.8 < -DI 42.9"
+        "detail": "ADX 40.4 > 25, +DI 16.9 < -DI 37.2"
       },
       "roc126": {
         "value": false,
-        "detail": "ROC126 -4.0% < 0"
+        "detail": "ROC126 -1.5% < 0"
       }
     },
-    "days_at_confirmed": 5,
+    "days_at_confirmed": 6,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,15 +45,15 @@
   "watch": [
     {
       "icon": "below",
-      "text": "SPY is 4.0% below EMA200 \u2014 needs to cross above for +1 point"
+      "text": "SPY is 1.2% below EMA200 \u2014 needs to cross above for +1 point"
     },
     {
       "icon": "warning",
-      "text": "ADX at 40.7 (above 25), but +DI < -DI"
+      "text": "ADX at 40.4 (above 25), but +DI < -DI"
     },
     {
       "icon": "below",
-      "text": "6-month momentum is negative (-4.0%) \u2014 watch for turn positive"
+      "text": "6-month momentum is negative (-1.5%) \u2014 watch for turn positive"
     }
   ],
   "action_required": "NONE"
