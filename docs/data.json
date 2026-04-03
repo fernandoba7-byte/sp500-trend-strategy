@@ -12,7 +12,7 @@
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 38.9 > 25, +DI 19.0 < -DI 37.4"
+        "detail": "ADX 38.9 > 25, +DI 18.9 < -DI 37.3"
       },
       "roc126": {
         "value": false,
@@ -2824,8 +2824,8 @@
       "spy_close": 655.83,
       "ema200": 659.04,
       "adx": 38.9,
-      "plus_di": 19.0,
-      "minus_di": 37.4,
+      "plus_di": 18.9,
+      "minus_di": 37.3,
       "roc126": -1.33,
       "raw_score": 0,
       "confirmed_alloc": 0.0
