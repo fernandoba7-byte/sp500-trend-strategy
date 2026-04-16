@@ -1,5 +1,5 @@
 {
-  "date": "2026-04-15",
+  "date": "2026-04-16",
   "signal": {
     "confirmed_allocation": 1.0,
     "allocation_label": "100% Equities / 0% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 699.94 > EMA200 662.28"
+        "detail": "SPY 701.66 > EMA200 662.72"
       },
       "adx_di": {
         "value": true,
-        "detail": "ADX 27.5 > 25, +DI 37.1 > -DI 25.2"
+        "detail": "ADX 27.1 > 25, +DI 37.8 > -DI 24.3"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 6.2% > 0"
+        "detail": "ROC126 6.6% > 0"
       }
     },
-    "days_at_confirmed": 1,
+    "days_at_confirmed": 2,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,30 +45,19 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 5.7% above EMA200 \u2014 buffer of $37.66"
+      "text": "SPY is 5.9% above EMA200 \u2014 buffer of $38.94"
     },
     {
       "icon": "above",
-      "text": "ADX at 27.5 (above 25), but +DI > -DI"
+      "text": "ADX at 27.1 (above 25), but +DI > -DI"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+6.2%)"
+      "text": "6-month momentum is positive (+6.6%)"
     }
   ],
-  "action_required": "INCREASE_EQUITY",
+  "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-04-14",
-      "spy_close": 533.01,
-      "ema200": 564.11,
-      "adx": 34.9,
-      "plus_di": 16.2,
-      "minus_di": 25.4,
-      "roc126": -5.83,
-      "raw_score": 0,
-      "confirmed_alloc": 0.0
-    },
     {
       "date": "2025-04-15",
       "spy_close": 531.52,
@@ -2827,6 +2816,17 @@
       "plus_di": 37.1,
       "minus_di": 25.2,
       "roc126": 6.17,
+      "raw_score": 3,
+      "confirmed_alloc": 1.0
+    },
+    {
+      "date": "2026-04-16",
+      "spy_close": 701.66,
+      "ema200": 662.72,
+      "adx": 27.1,
+      "plus_di": 37.8,
+      "minus_di": 24.3,
+      "roc126": 6.56,
       "raw_score": 3,
       "confirmed_alloc": 1.0
     }
