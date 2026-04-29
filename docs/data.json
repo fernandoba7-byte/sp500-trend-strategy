@@ -1,5 +1,5 @@
 {
-  "date": "2026-04-28",
+  "date": "2026-04-29",
   "signal": {
     "confirmed_allocation": 1.0,
     "allocation_label": "100% Equities / 0% SGOV",
@@ -8,24 +8,24 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 711.69 > EMA200 666.46"
+        "detail": "SPY 711.58 > EMA200 666.92"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 24.2 < 25, +DI 31.3 > -DI 24.2"
+        "detail": "ADX 23.3 < 25, +DI 30.2 > -DI 24.1"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 5.7% > 0"
+        "detail": "ROC126 4.4% > 0"
       }
     },
-    "days_at_confirmed": 10,
-    "days_at_pending": 1,
+    "days_at_confirmed": 11,
+    "days_at_pending": 2,
     "pending_change": {
       "pending_score": 2,
       "pending_alloc": 0.66,
-      "days_counted": 1,
-      "days_remaining": 2
+      "days_counted": 2,
+      "days_remaining": 1
     }
   },
   "portfolio": {
@@ -50,30 +50,19 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 6.8% above EMA200 \u2014 buffer of $45.23"
+      "text": "SPY is 6.7% above EMA200 \u2014 buffer of $44.66"
     },
     {
       "icon": "below",
-      "text": "ADX at 24.2 \u2014 needs 0.8 more to cross 25 threshold"
+      "text": "ADX at 23.3 \u2014 needs 1.7 more to cross 25 threshold"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+5.7%)"
+      "text": "6-month momentum is positive (+4.4%)"
     }
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-04-28",
-      "spy_close": 544.61,
-      "ema200": 563.61,
-      "adx": 28.3,
-      "plus_di": 22.0,
-      "minus_di": 25.2,
-      "roc126": -4.09,
-      "raw_score": 0,
-      "confirmed_alloc": 0.0
-    },
     {
       "date": "2025-04-29",
       "spy_close": 548.04,
@@ -2832,6 +2821,17 @@
       "plus_di": 31.3,
       "minus_di": 24.2,
       "roc126": 5.68,
+      "raw_score": 2,
+      "confirmed_alloc": 1.0
+    },
+    {
+      "date": "2026-04-29",
+      "spy_close": 711.58,
+      "ema200": 666.92,
+      "adx": 23.3,
+      "plus_di": 30.2,
+      "minus_di": 24.1,
+      "roc126": 4.44,
       "raw_score": 2,
       "confirmed_alloc": 1.0
     }
