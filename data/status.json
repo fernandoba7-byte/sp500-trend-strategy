@@ -1,32 +1,27 @@
 {
-  "date": "2026-04-29",
+  "date": "2026-04-30",
   "signal": {
-    "confirmed_allocation": 1.0,
-    "allocation_label": "100% Equities / 0% SGOV",
+    "confirmed_allocation": 0.66,
+    "allocation_label": "66% Equities / 34% SGOV",
     "raw_score": 2,
-    "confirmed_score": 3,
+    "confirmed_score": 2,
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 711.58 > EMA200 666.92"
+        "detail": "SPY 718.66 > EMA200 667.43"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 23.3 < 25, +DI 30.2 > -DI 24.1"
+        "detail": "ADX 23.2 < 25, +DI 34.5 > -DI 22.1"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 4.4% > 0"
+        "detail": "ROC126 5.2% > 0"
       }
     },
-    "days_at_confirmed": 11,
-    "days_at_pending": 2,
-    "pending_change": {
-      "pending_score": 2,
-      "pending_alloc": 0.66,
-      "days_counted": 2,
-      "days_remaining": 1
-    }
+    "days_at_confirmed": 1,
+    "days_at_pending": 0,
+    "pending_change": null
   },
   "portfolio": {
     "tickers": [
@@ -38,28 +33,28 @@
     ],
     "cash_etf": "SGOV",
     "target_alloc": {
-      "equities": 1.0,
-      "sgov": 0.0
+      "equities": 0.66,
+      "sgov": 0.34
     }
   },
   "dca": {
     "monthly_deposit": 3000,
-    "per_stock": 600.0,
-    "sgov": 0.0
+    "per_stock": 396.0,
+    "sgov": 1020.0
   },
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 6.7% above EMA200 \u2014 buffer of $44.66"
+      "text": "SPY is 7.7% above EMA200 \u2014 buffer of $51.23"
     },
     {
       "icon": "below",
-      "text": "ADX at 23.3 \u2014 needs 1.7 more to cross 25 threshold"
+      "text": "ADX at 23.2 \u2014 needs 1.8 more to cross 25 threshold"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+4.4%)"
+      "text": "6-month momentum is positive (+5.2%)"
     }
   ],
-  "action_required": "NONE"
+  "action_required": "DECREASE_EQUITY"
 }
