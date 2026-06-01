@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-29",
+  "date": "2026-06-01",
   "signal": {
     "confirmed_allocation": 1.0,
     "allocation_label": "100% Equities / 0% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 756.48 > EMA200 678.68"
+        "detail": "SPY 758.54 > EMA200 679.27"
       },
       "adx_di": {
         "value": true,
-        "detail": "ADX 28.9 > 25, +DI 39.1 > -DI 16.1"
+        "detail": "ADX 30.0 > 25, +DI 39.1 > -DI 15.2"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 12.7% > 0"
+        "detail": "ROC126 12.2% > 0"
       }
     },
-    "days_at_confirmed": 13,
+    "days_at_confirmed": 14,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,30 +45,19 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 11.5% above EMA200 \u2014 buffer of $77.80"
+      "text": "SPY is 11.7% above EMA200 \u2014 buffer of $79.27"
     },
     {
       "icon": "above",
-      "text": "ADX at 28.9 (above 25), but +DI > -DI"
+      "text": "ADX at 30.0 (above 25), but +DI > -DI"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+12.7%)"
+      "text": "6-month momentum is positive (+12.2%)"
     }
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-05-29",
-      "spy_close": 583.36,
-      "ema200": 567.73,
-      "adx": 18.2,
-      "plus_di": 28.1,
-      "minus_di": 20.2,
-      "roc126": -0.28,
-      "raw_score": 1,
-      "confirmed_alloc": 0.66
-    },
     {
       "date": "2025-05-30",
       "spy_close": 582.71,
@@ -998,7 +987,7 @@
       "spy_close": 662.41,
       "ema200": 593.73,
       "adx": 27.2,
-      "plus_di": 33.1,
+      "plus_di": 33.2,
       "minus_di": 19.1,
       "roc126": 19.77,
       "raw_score": 3,
@@ -2827,6 +2816,17 @@
       "plus_di": 39.1,
       "minus_di": 16.1,
       "roc126": 12.71,
+      "raw_score": 3,
+      "confirmed_alloc": 1.0
+    },
+    {
+      "date": "2026-06-01",
+      "spy_close": 758.54,
+      "ema200": 679.27,
+      "adx": 30.0,
+      "plus_di": 39.1,
+      "minus_di": 15.2,
+      "roc126": 12.24,
       "raw_score": 3,
       "confirmed_alloc": 1.0
     }
