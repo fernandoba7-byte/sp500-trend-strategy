@@ -8,15 +8,15 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 746.74 > EMA200 686.24"
+        "detail": "SPY 746.74 > EMA200 684.49"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 22.1 < 25, +DI 21.0 < -DI 27.2"
+        "detail": "ADX 22.1 < 25, +DI 20.7 < -DI 26.8"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 10.6% > 0"
+        "detail": "ROC126 10.9% > 0"
       }
     },
     "days_at_confirmed": 8,
@@ -45,7 +45,7 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 8.8% above EMA200 \u2014 buffer of $60.50"
+      "text": "SPY is 9.1% above EMA200 \u2014 buffer of $62.25"
     },
     {
       "icon": "below",
@@ -53,7 +53,7 @@
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+10.6%)"
+      "text": "6-month momentum is positive (+10.9%)"
     }
   ],
   "action_required": "NONE"
