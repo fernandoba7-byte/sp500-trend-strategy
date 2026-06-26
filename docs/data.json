@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-25",
+  "date": "2026-06-26",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 734.30 > EMA200 686.41"
+        "detail": "SPY 728.99 > EMA200 686.84"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 22.0 < 25, +DI 16.6 < -DI 28.8"
+        "detail": "ADX 22.6 < 25, +DI 15.4 < -DI 28.8"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 7.8% > 0"
+        "detail": "ROC126 6.5% > 0"
       }
     },
-    "days_at_confirmed": 12,
+    "days_at_confirmed": 13,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,30 +45,19 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 7.0% above EMA200 \u2014 buffer of $47.89"
+      "text": "SPY is 6.1% above EMA200 \u2014 buffer of $42.15"
     },
     {
       "icon": "below",
-      "text": "ADX at 22.0 \u2014 needs 3.0 more to cross 25 threshold"
+      "text": "ADX at 22.6 \u2014 needs 2.4 more to cross 25 threshold"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+7.8%)"
+      "text": "6-month momentum is positive (+6.5%)"
     }
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-06-25",
-      "spy_close": 600.47,
-      "ema200": 570.7,
-      "adx": 15.0,
-      "plus_di": 25.7,
-      "minus_di": 16.5,
-      "roc126": 4.56,
-      "raw_score": 2,
-      "confirmed_alloc": 0.66
-    },
     {
       "date": "2025-06-26",
       "spy_close": 605.16,
@@ -2827,6 +2816,17 @@
       "plus_di": 16.6,
       "minus_di": 28.8,
       "roc126": 7.79,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-06-26",
+      "spy_close": 728.99,
+      "ema200": 686.84,
+      "adx": 22.6,
+      "plus_di": 15.4,
+      "minus_di": 28.8,
+      "roc126": 6.53,
       "raw_score": 2,
       "confirmed_alloc": 0.66
     }
