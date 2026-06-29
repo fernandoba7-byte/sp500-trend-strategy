@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-26",
+  "date": "2026-06-29",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 728.99 > EMA200 686.84"
+        "detail": "SPY 741.00 > EMA200 687.32"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 22.6 < 25, +DI 15.4 < -DI 28.8"
+        "detail": "ADX 23.8 < 25, +DI 16.5 < -DI 30.9"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 6.5% > 0"
+        "detail": "ROC126 7.9% > 0"
       }
     },
-    "days_at_confirmed": 13,
+    "days_at_confirmed": 14,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,15 +45,15 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 6.1% above EMA200 \u2014 buffer of $42.15"
+      "text": "SPY is 7.8% above EMA200 \u2014 buffer of $53.68"
     },
     {
       "icon": "below",
-      "text": "ADX at 22.6 \u2014 needs 2.4 more to cross 25 threshold"
+      "text": "ADX at 23.8 \u2014 needs 1.2 more to cross 25 threshold"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+6.5%)"
+      "text": "6-month momentum is positive (+7.9%)"
     }
   ],
   "action_required": "NONE"
