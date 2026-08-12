@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-11",
+  "date": "2026-08-12",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 770.56 > EMA200 701.21"
+        "detail": "SPY 772.49 > EMA200 701.74"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 22.7 < 25, +DI 29.3 > -DI 18.1"
+        "detail": "ADX 22.7 < 25, +DI 28.4 > -DI 17.5"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 11.6% > 0"
+        "detail": "ROC126 12.2% > 0"
       }
     },
-    "days_at_confirmed": 44,
+    "days_at_confirmed": 45,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,7 +45,7 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 9.9% above EMA200 \u2014 buffer of $69.35"
+      "text": "SPY is 10.1% above EMA200 \u2014 buffer of $70.75"
     },
     {
       "icon": "below",
@@ -53,22 +53,11 @@
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+11.6%)"
+      "text": "6-month momentum is positive (+12.2%)"
     }
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-08-11",
-      "spy_close": 628.95,
-      "ema200": 580.8,
-      "adx": 26.6,
-      "plus_di": 28.3,
-      "minus_di": 17.1,
-      "roc126": 6.48,
-      "raw_score": 3,
-      "confirmed_alloc": 1.0
-    },
     {
       "date": "2025-08-12",
       "spy_close": 635.65,
@@ -2823,10 +2812,21 @@
       "date": "2026-08-11",
       "spy_close": 770.56,
       "ema200": 701.21,
-      "adx": 22.7,
+      "adx": 22.6,
       "plus_di": 29.3,
-      "minus_di": 18.1,
+      "minus_di": 18.2,
       "roc126": 11.63,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-08-12",
+      "spy_close": 772.49,
+      "ema200": 701.74,
+      "adx": 22.7,
+      "plus_di": 28.4,
+      "minus_di": 17.5,
+      "roc126": 12.21,
       "raw_score": 2,
       "confirmed_alloc": 0.66
     }
