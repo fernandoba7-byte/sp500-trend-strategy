@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-08",
+  "date": "2026-09-09",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -8,18 +8,18 @@
     "sub_signals": {
       "ema200": {
         "value": true,
-        "detail": "SPY 765.96 > EMA200 710.43"
+        "detail": "SPY 762.40 > EMA200 710.95"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 13.1 < 25, +DI 28.8 > -DI 25.4"
+        "detail": "ADX 12.4 < 25, +DI 27.1 < -DI 28.8"
       },
       "roc126": {
         "value": true,
-        "detail": "ROC126 13.5% > 0"
+        "detail": "ROC126 13.2% > 0"
       }
     },
-    "days_at_confirmed": 63,
+    "days_at_confirmed": 64,
     "days_at_pending": 0,
     "pending_change": null
   },
@@ -45,30 +45,19 @@
   "watch": [
     {
       "icon": "above",
-      "text": "SPY is 7.8% above EMA200 \u2014 buffer of $55.53"
+      "text": "SPY is 7.2% above EMA200 \u2014 buffer of $51.45"
     },
     {
       "icon": "below",
-      "text": "ADX at 13.1 \u2014 needs 11.9 more to cross 25 threshold"
+      "text": "ADX at 12.4 \u2014 needs 12.6 more to cross 25 threshold"
     },
     {
       "icon": "above",
-      "text": "6-month momentum is positive (+13.5%)"
+      "text": "6-month momentum is positive (+13.2%)"
     }
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-09-08",
-      "spy_close": 641.72,
-      "ema200": 586.89,
-      "adx": 21.9,
-      "plus_di": 32.0,
-      "minus_di": 20.2,
-      "roc126": 13.33,
-      "raw_score": 2,
-      "confirmed_alloc": 0.66
-    },
     {
       "date": "2025-09-09",
       "spy_close": 643.2,
@@ -2827,6 +2816,17 @@
       "plus_di": 28.8,
       "minus_di": 25.4,
       "roc126": 13.53,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-09-09",
+      "spy_close": 762.4,
+      "ema200": 710.95,
+      "adx": 12.4,
+      "plus_di": 27.1,
+      "minus_di": 28.8,
+      "roc126": 13.18,
       "raw_score": 2,
       "confirmed_alloc": 0.66
     }
