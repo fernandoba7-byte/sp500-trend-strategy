@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-14",
+  "date": "2026-10-15",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -12,14 +12,14 @@
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 9.0 < 25, +DI 26.9 > -DI 24.2"
+        "detail": "ADX 9.8 < 25, +DI 23.5 < -DI 30.7"
       },
       "roc126": {
         "value": false,
         "detail": "ROC126 nan% < 0"
       }
     },
-    "days_at_confirmed": 89,
+    "days_at_confirmed": 90,
     "days_at_pending": 1,
     "pending_change": {
       "pending_score": 0,
@@ -54,7 +54,7 @@
     },
     {
       "icon": "below",
-      "text": "ADX at 9.0 \u2014 needs 16.0 more to cross 25 threshold"
+      "text": "ADX at 9.8 \u2014 needs 15.2 more to cross 25 threshold"
     },
     {
       "icon": "below",
@@ -63,17 +63,6 @@
   ],
   "action_required": "NONE",
   "history": [
-    {
-      "date": "2025-10-14",
-      "spy_close": 655.16,
-      "ema200": 594.44,
-      "adx": 28.5,
-      "plus_di": 15.7,
-      "minus_di": 29.5,
-      "roc126": 23.54,
-      "raw_score": 2,
-      "confirmed_alloc": 0.66
-    },
     {
       "date": "2025-10-15",
       "spy_close": 658.07,
@@ -2826,11 +2815,22 @@
     },
     {
       "date": "2026-10-14",
+      "spy_close": 769.6,
+      "ema200": 721.02,
+      "adx": 9.6,
+      "plus_di": 25.3,
+      "minus_di": 33.0,
+      "roc126": 10.51,
+      "raw_score": 2,
+      "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-10-15",
       "spy_close": NaN,
       "ema200": NaN,
-      "adx": 9.0,
-      "plus_di": 26.9,
-      "minus_di": 24.2,
+      "adx": 9.8,
+      "plus_di": 23.5,
+      "minus_di": 30.7,
       "roc126": null,
       "raw_score": 0,
       "confirmed_alloc": 0.66

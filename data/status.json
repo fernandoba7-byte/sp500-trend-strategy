@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-14",
+  "date": "2026-10-15",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -12,14 +12,14 @@
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 9.0 < 25, +DI 26.9 > -DI 24.2"
+        "detail": "ADX 9.8 < 25, +DI 23.5 < -DI 30.7"
       },
       "roc126": {
         "value": false,
         "detail": "ROC126 nan% < 0"
       }
     },
-    "days_at_confirmed": 89,
+    "days_at_confirmed": 90,
     "days_at_pending": 1,
     "pending_change": {
       "pending_score": 0,
@@ -54,7 +54,7 @@
     },
     {
       "icon": "below",
-      "text": "ADX at 9.0 \u2014 needs 16.0 more to cross 25 threshold"
+      "text": "ADX at 9.8 \u2014 needs 15.2 more to cross 25 threshold"
     },
     {
       "icon": "below",
