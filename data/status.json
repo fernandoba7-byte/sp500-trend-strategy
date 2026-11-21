@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "signal": {
     "confirmed_allocation": 0.66,
     "allocation_label": "66% Equities / 34% SGOV",
@@ -8,24 +8,24 @@
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 715.87 < EMA200 730.20"
+        "detail": "SPY 689.81 < EMA200 730.29"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 17.2 < 25, +DI 17.5 < -DI 36.5"
+        "detail": "ADX 19.6 < 25, +DI 14.6 < -DI 45.6"
       },
       "roc126": {
         "value": false,
-        "detail": "ROC126 -3.1% < 0"
+        "detail": "ROC126 -7.0% < 0"
       }
     },
-    "days_at_confirmed": 115,
-    "days_at_pending": 1,
+    "days_at_confirmed": 116,
+    "days_at_pending": 2,
     "pending_change": {
       "pending_score": 0,
       "pending_alloc": 0.0,
-      "days_counted": 1,
-      "days_remaining": 2
+      "days_counted": 2,
+      "days_remaining": 1
     }
   },
   "portfolio": {
@@ -50,15 +50,15 @@
   "watch": [
     {
       "icon": "below",
-      "text": "SPY is 2.0% below EMA200 \u2014 needs to cross above for +1 point"
+      "text": "SPY is 5.5% below EMA200 \u2014 needs to cross above for +1 point"
     },
     {
       "icon": "below",
-      "text": "ADX at 17.2 \u2014 needs 7.8 more to cross 25 threshold"
+      "text": "ADX at 19.6 \u2014 needs 5.4 more to cross 25 threshold"
     },
     {
       "icon": "below",
-      "text": "6-month momentum is negative (-3.1%) \u2014 watch for turn positive"
+      "text": "6-month momentum is negative (-7.0%) \u2014 watch for turn positive"
     }
   ],
   "action_required": "NONE"
