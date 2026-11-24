@@ -1,32 +1,27 @@
 {
-  "date": "2026-11-20",
+  "date": "2026-11-23",
   "signal": {
-    "confirmed_allocation": 0.66,
-    "allocation_label": "66% Equities / 34% SGOV",
+    "confirmed_allocation": 0.0,
+    "allocation_label": "0% Equities / 100% SGOV",
     "raw_score": 0,
-    "confirmed_score": 2,
+    "confirmed_score": 0,
     "sub_signals": {
       "ema200": {
         "value": false,
-        "detail": "SPY 689.81 < EMA200 730.29"
+        "detail": "SPY 722.29 < EMA200 730.47"
       },
       "adx_di": {
         "value": false,
-        "detail": "ADX 19.6 < 25, +DI 14.6 < -DI 45.6"
+        "detail": "ADX 21.0 < 25, +DI 16.5 < -DI 37.5"
       },
       "roc126": {
         "value": false,
-        "detail": "ROC126 -7.0% < 0"
+        "detail": "ROC126 -3.3% < 0"
       }
     },
-    "days_at_confirmed": 116,
-    "days_at_pending": 2,
-    "pending_change": {
-      "pending_score": 0,
-      "pending_alloc": 0.0,
-      "days_counted": 2,
-      "days_remaining": 1
-    }
+    "days_at_confirmed": 1,
+    "days_at_pending": 0,
+    "pending_change": null
   },
   "portfolio": {
     "tickers": [
@@ -38,42 +33,31 @@
     ],
     "cash_etf": "SGOV",
     "target_alloc": {
-      "equities": 0.66,
-      "sgov": 0.34
+      "equities": 0.0,
+      "sgov": 1.0
     }
   },
   "dca": {
     "monthly_deposit": 3000,
-    "per_stock": 396.0,
-    "sgov": 1020.0
+    "per_stock": 0.0,
+    "sgov": 3000.0
   },
   "watch": [
     {
       "icon": "below",
-      "text": "SPY is 5.5% below EMA200 \u2014 needs to cross above for +1 point"
+      "text": "SPY is 1.1% below EMA200 \u2014 needs to cross above for +1 point"
     },
     {
       "icon": "below",
-      "text": "ADX at 19.6 \u2014 needs 5.4 more to cross 25 threshold"
+      "text": "ADX at 21.0 \u2014 needs 4.0 more to cross 25 threshold"
     },
     {
       "icon": "below",
-      "text": "6-month momentum is negative (-7.0%) \u2014 watch for turn positive"
+      "text": "6-month momentum is negative (-3.3%) \u2014 watch for turn positive"
     }
   ],
-  "action_required": "NONE",
+  "action_required": "DECREASE_EQUITY",
   "history": [
-    {
-      "date": "2025-11-20",
-      "spy_close": 645.57,
-      "ema200": 605.48,
-      "adx": 17.3,
-      "plus_di": 20.7,
-      "minus_di": 26.5,
-      "roc126": 12.55,
-      "raw_score": 2,
-      "confirmed_alloc": 0.66
-    },
     {
       "date": "2025-11-21",
       "spy_close": 652.0,
@@ -2834,6 +2818,17 @@
       "roc126": -7.02,
       "raw_score": 0,
       "confirmed_alloc": 0.66
+    },
+    {
+      "date": "2026-11-23",
+      "spy_close": 722.29,
+      "ema200": 730.47,
+      "adx": 21.0,
+      "plus_di": 16.5,
+      "minus_di": 37.5,
+      "roc126": -3.28,
+      "raw_score": 0,
+      "confirmed_alloc": 0.0
     }
   ]
 }
